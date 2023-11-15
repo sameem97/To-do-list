@@ -1,69 +1,49 @@
 import sys
+import argparse
+from task_manager import TaskManager
 
 
 def main():
-    tasks = []
-    print("list, add, delete, update, quit")
-    while True:
-        user_input = input("To do> ")
-        parsed_user_input = user_input.split(" ")
-        try:
-            command = parsed_user_input[0]
-            if command == "quit":
-                sys.exit()
-            elif command == "list":
-                list_tasks(tasks)
-            elif command == "add":
-                add_task(tasks)
-            elif command == "update":
-                update_task(tasks)
-            elif command == "delete":
-                delete_task(tasks)
-        except IndexError:
-            print(
-                "Error. Please input the correct number of parameters based on the action you would like to perform."
-            )
-
-
-def list_tasks(tasks: list):
-    for task in tasks:
-        print(task.items())
-
-
-def add_task(tasks: list):
-    name = input("Please enter a name for this task.")
-    description = input("Please enter a short description for this task.")
-    due_date = input(
-        "Please enter a due date for this task in the format 'dd/mm/yyyy'."
-    )
-    status = input(
-        "Please enter the current task status between 'Not Started', 'In Progress', 'Completed'."
-    )
-    tasks.append(
-        {
-            "name": name,
-            "description": description,
-            "Due Date": due_date,
-            "Status": status,
-        }
+    """Main function for to-do list"""
+    parser = argparse.ArgumentParser(description="Simple To-Do List CLI")
+    parser.add_argument(
+        "command", choices=["add", "show", "update"], help="Command to perform"
     )
 
+    if "add" in sys.argv:
+        parser.add_argument("description", help="Task description")
+        parser.add_argument(
+            "--due-date", help="Due date of the task (format: DD-MM-YYYY)"
+        )
+        parser.add_argument(
+            "--status", default="pending", help="Status of the task (default: pending)"
+        )
 
-def update_task(tasks: list):
-    name = input("Which task would you like to update?")
-    update_attribute = input("Which attribute would you like to update?")
-    new_value = input("What would you like to update it to?")
-    for task in tasks:
-        if task["name"] == name:
-            task[update_attribute] = new_value
+    elif "update" in sys.argv:
+        parser.add_argument("task_id", type=int, help="ID of the task to update")
+        parser.add_argument(
+            "attribute",
+            choices=["description", "due_date", "status"],
+            help="Attribute to update",
+        )
+        parser.add_argument("new_value", help="New value for the attribute")
 
+    args = parser.parse_args()
 
-def delete_task(tasks: list):
-    name = input("Which task would you like to delete?")
-    for task in tasks:
-        if task["name"] == name:
-            tasks.remove(task)
-            break
+    task_manager = TaskManager()
+
+    if args.command == "add":
+        task_manager.add_task(args.description, args.due_date, args.status)
+        print(f"Task added: {args.description}")
+
+    elif args.command == "show":
+        task_manager.show_tasks()
+
+    elif args.command == "update":
+        task_manager.update_task(args.task_id, args.attribute, args.new_value)
+        print(f"Task updated: {args.task_id}, {args.attribute} set to {args.new_value}")
+
+    task_manager.close()
 
 
 if __name__ == "__main__":
