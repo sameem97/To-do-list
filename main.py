@@ -7,7 +7,9 @@ def main():
     """Main function for to-do list"""
     parser = argparse.ArgumentParser(description="Simple To-Do List CLI")
     parser.add_argument(
-        "command", choices=["add", "show", "update"], help="Command to perform"
+        "command",
+        choices=["add", "show", "update", "delete"],
+        help="Command to perform",
     )
 
     if "add" in sys.argv:
@@ -16,7 +18,9 @@ def main():
             "--due-date", help="Due date of the task (format: DD-MM-YYYY)"
         )
         parser.add_argument(
-            "--status", default="pending", help="Status of the task (default: pending)"
+            "--status",
+            default="Not Started",
+            help="Status of the task (default: Not Started)",
         )
 
     elif "update" in sys.argv:
@@ -27,6 +31,9 @@ def main():
             help="Attribute to update",
         )
         parser.add_argument("new_value", help="New value for the attribute")
+
+    elif "delete" in sys.argv:
+        parser.add_argument("task_id", type=int, help="ID of the task to delete")
 
     args = parser.parse_args()
 
@@ -42,6 +49,10 @@ def main():
     elif args.command == "update":
         task_manager.update_task(args.task_id, args.attribute, args.new_value)
         print(f"Task updated: {args.task_id}, {args.attribute} set to {args.new_value}")
+
+    elif args.command == "delete":
+        task_manager.delete_task(args.task_id)
+        print(f"Task {args.task_id} has been deleted")
 
     task_manager.close()
 

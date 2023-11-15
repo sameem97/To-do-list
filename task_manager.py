@@ -10,6 +10,8 @@ class TaskManager:
         self.connection = sqlite3.connect(db_name)
         self.create_table()
 
+    # id should take lowest available key available
+    # but deleting a task and adding a new task, still increments up
     def create_table(self):
         """Create table with columns id, description, due_date and status"""
         cursor = self.connection.cursor()
@@ -28,10 +30,8 @@ class TaskManager:
     def add_task(self, description, due_date, status):
         """Add task to table with description, due_date and status"""
         cursor = self.connection.cursor()
-        cursor.execute(
-            "INSERT INTO tasks (description, due_date, status) VALUES (?, ?, ?)",
-            (description, due_date, status),
-        )
+        query = "INSERT INTO tasks (description, due_date, status) VALUES (?, ?, ?)"
+        cursor.execute(query, (description, due_date, status))
         self.connection.commit()
 
     def show_tasks(self):
@@ -53,8 +53,14 @@ class TaskManager:
             )
             return
 
-        query = f"UPDATE tasks SET {attribute}=? WHERE id=?"
-        cursor.execute(query, (new_value, task_id))
+        cursor.execute(f"UPDATE tasks SET {attribute}={new_value} WHERE id={task_id}")
+        self.connection.commit()
+
+    # add validation for task_id entered
+    def delete_task(self, task_id: int):
+        """Delete task"""
+        cursor = self.connection.cursor()
+        cursor.execute(f"DELETE FROM tasks WHERE id={task_id}")
         self.connection.commit()
 
     def close(self):
