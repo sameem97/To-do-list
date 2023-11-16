@@ -1,4 +1,5 @@
 import sqlite3
+from typing import List
 from tabulate import tabulate
 
 
@@ -6,12 +7,11 @@ class TaskManager:
     """Task manager to handle the tasks in the SQLite database"""
 
     def __init__(self, db_name="tasks.db"):
-        """Initialise task manager object with connection to sqlite db and create cursor and table"""
+        """Initialise task manager object. Create new sqlite db and connect to it. Create cursor and table"""
         self.connection = sqlite3.connect(db_name)
         self.create_table()
+        self.task_ids: List[int] = self.__get_task_ids()
 
-    # id should take lowest available key available
-    # but deleting a task and adding a new task, still increments up
     def create_table(self):
         """Create table with columns id, description, due_date and status"""
         cursor = self.connection.cursor()
@@ -26,6 +26,13 @@ class TaskManager:
         """
         )
         self.connection.commit()
+
+    def __get_task_ids(self):
+        cursor = self.connection.cursor()
+        query = "SELECT id FROM tasks"
+        cursor.execute(query)
+        task_ids = [row[0] for row in cursor.fetchall()]
+        return task_ids
 
     def add_task(self, description, due_date, status):
         """Add task to table with description, due_date and status"""
@@ -47,20 +54,25 @@ class TaskManager:
         cursor = self.connection.cursor()
 
         valid_attributes = ["description", "due_date", "status"]
-        if attribute not in valid_attributes:
+        if task_id not in self.task_ids:
+            print("Invalid task id. Task id does not exist.")
+            return
+        elif attribute not in valid_attributes:
             print(
                 "Invalid attribute. Allowed attributes: description, due_date, status"
             )
             return
-
-        cursor.execute(f"UPDATE tasks SET {attribute}={new_value} WHERE id={task_id}")
+        query = f"UPDATE tasks SET {attribute}=? WHERE id=?"
+        cursor.execute(query, (new_value, task_id))
         self.connection.commit()
 
-    # add validation for task_id entered
     def delete_task(self, task_id: int):
         """Delete task"""
         cursor = self.connection.cursor()
-        cursor.execute(f"DELETE FROM tasks WHERE id={task_id}")
+        if task_id not in self.task_ids:
+            return "Cannot delete this task. The ID does not exist!"
+        query = "DELETE FROM tasks WHERE id=?"
+        cursor.execute(query, (task_id))
         self.connection.commit()
 
     def close(self):

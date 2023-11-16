@@ -19,6 +19,7 @@ def main():
         )
         parser.add_argument(
             "--status",
+            choices=["Not Started", "In Progress", "Blocked", "Completed"],
             default="Not Started",
             help="Status of the task (default: Not Started)",
         )
