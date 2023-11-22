@@ -55,13 +55,11 @@ class TaskManager:
 
         valid_attributes = ["description", "due_date", "status"]
         if task_id not in self.task_ids:
-            print("Invalid task id. Task id does not exist.")
-            return
+            raise ValueError("Invalid task id. Task id does not exist.")
         elif attribute not in valid_attributes:
-            print(
+            raise ValueError(
                 "Invalid attribute. Allowed attributes: description, due_date, status"
             )
-            return
         query = f"UPDATE tasks SET {attribute}=? WHERE id=?"
         cursor.execute(query, (new_value, task_id))
         self.connection.commit()
@@ -70,9 +68,9 @@ class TaskManager:
         """Delete task"""
         cursor = self.connection.cursor()
         if task_id not in self.task_ids:
-            return "Cannot delete this task. The ID does not exist!"
+            raise ValueError("Cannot delete this task. The task id does not exist!")
         query = "DELETE FROM tasks WHERE id=?"
-        cursor.execute(query, (task_id))
+        cursor.execute(query, (task_id,))
         self.connection.commit()
 
     def close(self):

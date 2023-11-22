@@ -15,11 +15,11 @@ def main():
     if "add" in sys.argv:
         parser.add_argument("description", help="Task description")
         parser.add_argument(
-            "--due-date", help="Due date of the task (format: DD-MM-YYYY)"
+            "due_date", help="Due date of the task (format: DD-MM-YYYY)"
         )
         parser.add_argument(
-            "--status",
-            choices=["Not Started", "In Progress", "Blocked", "Completed"],
+            "status",
+            choices=["Not_Started", "In_Progress", "Blocked", "Completed"],
             default="Not Started",
             help="Status of the task (default: Not Started)",
         )
@@ -48,12 +48,20 @@ def main():
         task_manager.show_tasks()
 
     elif args.command == "update":
-        task_manager.update_task(args.task_id, args.attribute, args.new_value)
-        print(f"Task updated: {args.task_id}, {args.attribute} set to {args.new_value}")
+        try:
+            task_manager.update_task(args.task_id, args.attribute, args.new_value)
+            print(
+                f"Task updated: {args.task_id}, {args.attribute} set to {args.new_value}"
+            )
+        except ValueError as e:
+            print(e)
 
     elif args.command == "delete":
-        task_manager.delete_task(args.task_id)
-        print(f"Task {args.task_id} has been deleted")
+        try:
+            task_manager.delete_task(args.task_id)
+            print(f"Task {args.task_id} has been deleted")
+        except ValueError as e:
+            print(e)
 
     task_manager.close()
 

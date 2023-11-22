@@ -17,7 +17,11 @@ class TestTaskManager(unittest.TestCase):
         columns_expected = ["id", "description", "due_date", "status"]
         connection = sqlite3.connect("tasks.db")
         cursor = connection.cursor()
-        cursor.execute(f"PRAGMA table_info('tasks')")
+        cursor.execute("PRAGMA table_info('tasks')")
         columns = cursor.fetchall()
         columns_created = [column[1] for column in columns]
         self.assertEqual(columns_created, columns_expected)
+
+    def test_date_formatting(self):
+        """test to ensure dates conform to dd/mm/yy format"""
+        pass
