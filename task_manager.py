@@ -1,6 +1,7 @@
 import sqlite3
 from typing import List
 from tabulate import tabulate
+import utilities
 
 
 class TaskManager:
@@ -36,6 +37,10 @@ class TaskManager:
 
     def add_task(self, description, due_date, status):
         """Add task to table with description, due_date and status"""
+        if not utilities.check_date_format(due_date):
+            raise ValueError("Date should be in the format dd/mm/yy.")
+        if len(description) > 50:
+            raise ValueError("Description length should be under 50 characters.")
         cursor = self.connection.cursor()
         query = "INSERT INTO tasks (description, due_date, status) VALUES (?, ?, ?)"
         cursor.execute(query, (description, due_date, status))
@@ -60,6 +65,9 @@ class TaskManager:
             raise ValueError(
                 "Invalid attribute. Allowed attributes: description, due_date, status"
             )
+        elif attribute == "due_date":
+            if not utilities.check_date_format(new_value):
+                raise ValueError("New due date should be in the format dd/mm/yy")
         query = f"UPDATE tasks SET {attribute}=? WHERE id=?"
         cursor.execute(query, (new_value, task_id))
         self.connection.commit()

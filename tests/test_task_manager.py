@@ -21,7 +21,3 @@ class TestTaskManager(unittest.TestCase):
         columns = cursor.fetchall()
         columns_created = [column[1] for column in columns]
         self.assertEqual(columns_created, columns_expected)
-
-    def test_date_formatting(self):
-        """test to ensure dates conform to dd/mm/yy format"""
-        pass
