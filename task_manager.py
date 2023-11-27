@@ -3,7 +3,6 @@ from typing import List
 from tabulate import tabulate
 import utilities
 
-
 class TaskManager:
     """Task manager to handle the tasks in the SQLite database"""
 

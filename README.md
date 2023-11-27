@@ -1,18 +1,21 @@
 # To-do-list
-This Python script is used as a to do list to keep track of tasks that need to be completed.
+This Python script is used as a to do list. The script should be run via the command line with additional arguments that will be parsed using the inbuilt argparse module (see arguments.py). An SQLite3 database is used to store the tasks and the task manager class serves to interact with the database as required. Tasks will be outputted to the terminal in a tabular format using the external Tabulate module (see requirements). main.py ties all the functionality together and is the module that should be run.
 
-To add a new task, in the terminal type:
+## Add task
+To add a new task, in the command line type:
 python3 main.py add *description* *due_date* *status*
-The due_date should be in the format dd/mm/yy and status either "Not_Started", "In_Progress", "Blocked" or "Completed".
+The due_date should be in the format dd/mm/yy(yy) and status either "Not_Started", "In_Progress", "Blocked" or "Completed".
 
-To update a task attribute:
+## Update task
+To update a task attribute such as the due date:
 python3 main.py update *attribute* *new_value*
-Attribute e.g. due_date and new_value valid date for example. Works similarly for other task attributes.
 
-To delete a task with task_id:
+## Delete task
+To delete a task via task_id:
 python3 main.py delete *task_id* 
-Task id needs to be a valid id in the table.
+Task id should be a valid id in the table.
 
+## Show tasks
 To view the tasks in the database:
 python3 main.py show
 This will stdout the table to the terminal.

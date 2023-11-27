@@ -1,8 +1,0 @@
-add a task (description, status)
-update status
-list all tasks
-
-add *description*
-list
-toggle status *index*
-
