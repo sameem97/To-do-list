@@ -18,4 +18,10 @@ Task id should be a valid id in the table.
 ## Show tasks
 To view the tasks in the database:
 python3 main.py show
-This will stdout the table to the terminal.
+This will stdout the table to the terminal as below:
+
+| Task ID | Description | Due Date | Status|
+|----------|----------|----------|----------|
+| 1 | Example description for task 1 | 5/12/2023 | Not Started |
+| 2 | Example description for task 2 | 12/12/2023 | Not Started |
+| 3 | Example description for task 3 | 30/11/2023 | Not Started |

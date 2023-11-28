@@ -1,9 +1,13 @@
+"""unittest module for testing the task manager"""
+
 import unittest
-from task_manager import TaskManager
 import sqlite3
+from task_manager import TaskManager
 
 
 class TestTaskManager(unittest.TestCase):
+    """unittest class to handle test cases for task manager"""
+
     def set_up(self):
         """set up task manager object for the tests. Creates sqlite db and tasks table."""
         self.task_manager = TaskManager()

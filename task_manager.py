@@ -1,3 +1,5 @@
+"""module for task manager"""
+
 import sqlite3
 from typing import List
 from tabulate import tabulate

@@ -1,3 +1,5 @@
+"""main module for to-do list"""
+
 import sys
 from task_manager import TaskManager
 from arguments import get_arguments
