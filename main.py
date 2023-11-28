@@ -3,10 +3,12 @@
 import sys
 from task_manager import TaskManager
 from arguments import get_arguments
+from logger import logger
 
 
 def main():
     """Main function for to-do list"""
+
     args = get_arguments(sys.argv[1:])
 
     task_manager = TaskManager()
@@ -29,7 +31,7 @@ def main():
             task_manager.delete_task(args.task_id)
             print(f"Task {args.task_id} has been deleted")
     except ValueError as e:
-        print(e)
+        logger.error("An error occurred: %s", e)
 
     task_manager.close()
 

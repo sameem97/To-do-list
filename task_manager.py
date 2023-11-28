@@ -5,6 +5,7 @@ from typing import List
 from tabulate import tabulate
 import utilities
 
+
 class TaskManager:
     """Task manager to handle the tasks in the SQLite database"""
 
@@ -39,7 +40,7 @@ class TaskManager:
     def add_task(self, description, due_date, status):
         """Add task to table with description, due_date and status"""
         if not utilities.check_date_format(due_date):
-            raise ValueError("Date should be in the format dd/mm/yy.")
+            raise ValueError("Date should be in the format dd/mm/yy(yy).")
         if len(description) > 50:
             raise ValueError("Description length should be under 50 characters.")
         cursor = self.connection.cursor()

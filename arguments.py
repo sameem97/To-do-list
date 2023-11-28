@@ -28,7 +28,9 @@ def get_arguments(inputs: List[str]) -> Arguments:
 
     if "add" in inputs:
         parser.add_argument("description", help="Task description")
-        parser.add_argument("due_date", help="Due date of the task (format: DD-MM-YY)")
+        parser.add_argument(
+            "due_date", help="Due date of the task (format: DD-MM-YY(YY))"
+        )
         parser.add_argument(
             "status",
             choices=["Not_Started", "In_Progress", "Blocked", "Completed"],
