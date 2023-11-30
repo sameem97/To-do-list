@@ -38,7 +38,7 @@ class TaskManager:
         return task_ids
 
     def add_task(self, description, due_date, status):
-        """Add task to table with description, due_date and status"""
+        """Add task to table. Must include description, due_date and status"""
         if not utilities.check_date_format(due_date):
             raise ValueError("Date should be in the format dd/mm/yy(yy).")
         if len(description) > 50:
@@ -57,7 +57,7 @@ class TaskManager:
         print(tabulate(tasks, headers=headers, tablefmt="grid"))
 
     def update_task(self, task_id: int, attribute, new_value):
-        """Update task e.g. due date, description, status"""
+        """Update task attribute e.g. due date, description, status"""
         cursor = self.connection.cursor()
 
         valid_attributes = ["description", "due_date", "status"]
@@ -75,7 +75,7 @@ class TaskManager:
         self.connection.commit()
 
     def delete_task(self, task_id: int):
-        """Delete task"""
+        """Delete task using valid task_id"""
         cursor = self.connection.cursor()
         if task_id not in self.task_ids:
             raise ValueError("Cannot delete this task. The task id does not exist!")
